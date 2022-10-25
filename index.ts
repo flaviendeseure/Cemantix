@@ -9,7 +9,7 @@ async function handler(_req: Request): Promise<Response> {
 
 // Read file a.txt with deno and take a word at random
 const getRandomWord = async () => {
-  const file = await Deno.readTextFile("a.txt");
+  const file = await Deno.readTextFile("liste_francais.txt");
   const words = file.split("\n");
   return words[Math.floor(Math.random() * words.length)];
 };
