@@ -1,7 +1,8 @@
 import { serve } from "https://deno.land/std@0.119.0/http/server.ts";
+import { writeAll } from "https://deno.land/std/streams/conversion.ts";
 
 async function handler(_req: Request): Promise<Response> {
-  await getStateGame();
+  //await getStateGame();
   const guess = await extractGuess(_req);
   const word_to_guess = await getCurrentWord();
   const similarity_ = await similarity(guess, word_to_guess);
@@ -17,10 +18,10 @@ const getRandomWord = async () => {
 };
 
 // Set state,word in the state.txt file
-const setState = (state: string, word: string) => {
+const setState = async (state: string, word: string) => {
   const encoder = new TextEncoder();
-  const data = encoder.encode(state + "," + word);
-  Deno.writeTextFileSync("state.txt", data);
+  //const data = encoder.encode(state + "," + word);
+  await Deno.writeAll("state.txt", encoder.encode(state + "," + word));
 };
 
 // Get state,word from the state.txt file
