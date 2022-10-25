@@ -1,9 +1,15 @@
 import { serve } from "https://deno.land/std@0.119.0/http/server.ts";
 
 async function handler(_req: Request): Promise<Response> {
-  return new Response(String(await similarity(await extractGuess(_req), "chat")));
+  const guess = await extractGuess(_req);
+  const similarity_ = await similarity(guess, "chien");
+  return new Response(String(responseBuilder(similarity_, guess)));
 }
 
+function responseBuilder(similarity, word){
+  const response = "Le mot " + word + " est proche à "+ 100*similarity +"% du mot chien";
+  return response
+}
 
 async function similarity(word1: string, word2:string){
   const body = {
