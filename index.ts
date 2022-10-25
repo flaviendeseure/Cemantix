@@ -2,7 +2,7 @@ import { serve } from "https://deno.land/std@0.119.0/http/server.ts";
 import { writeAll } from "https://deno.land/std/streams/conversion.ts";
 
 async function handler(_req: Request): Promise<Response> {
-  //await getStateGame();
+  await getStateGame();
   const guess = await extractGuess(_req);
   const word_to_guess = await getCurrentWord();
   const similarity_ = await similarity(guess, word_to_guess);
