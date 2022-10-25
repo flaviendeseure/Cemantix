@@ -44,7 +44,7 @@ const getCurrentWord = async () => {
 };
 
 function responseBuilder(similarity, word, sol){
-  const response = "Le mot " + word + " est proche à "+ Math.round(100*similarity) +"% du mot à deviner ("+sol+")";
+  const response = "Le mot " + word + " est proche à "+ Math.round(100*similarity) +"% du mot à deviner ("+sol+")" + getRandomWord();
   return response
 }
 
