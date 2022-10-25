@@ -4,7 +4,7 @@ async function handler(_req: Request): Promise<Response> {
   const guess = await extractGuess(_req);
   const word_to_guess = await getCurrentWord();
   const similarity_ = await similarity(guess, word_to_guess);
-  return new Response(String(responseBuilder(similarity_, guess)));
+  return new Response(String(responseBuilder(similarity_, guess, word_to_guess)));
 }
 
 // Read file a.txt with deno and take a word at random
@@ -43,8 +43,8 @@ const getCurrentWord = async () => {
   return word;
 };
 
-function responseBuilder(similarity, word){
-  const response = "Le mot " + word + " est proche à "+ Math.round(100*similarity) +"% du mot à deviner";
+function responseBuilder(similarity, word, sol){
+  const response = "Le mot " + word + " est proche à "+ Math.round(100*similarity) +"% du mot à deviner ("+sol+")";
   return response
 }
 
