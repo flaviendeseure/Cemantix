@@ -1,6 +1,7 @@
 import { json, serve, validateRequest } from "https://deno.land/std@0.119.0/http/server.ts";
 
 async function handler(_req: Request): Promise<Response> {
+  getStateGame();
   const guess = await extractGuess(_req);
   const word_to_guess = await getCurrentWord();
   const similarity_ = await similarity(guess, word_to_guess);
@@ -44,7 +45,7 @@ const getCurrentWord = async () => {
 };
 
 async function responseBuilder(similarity, word, sol){
-  const response = "Le mot " + word + " est proche à "+ Math.round(100*similarity) +"% du mot à deviner ("+sol+")" + (await getRandomWord());
+  const response = "Le mot " + word + " est proche à "+ Math.round(100*similarity) +"% du mot à deviner ("+sol+")";
   return response
 }
 
