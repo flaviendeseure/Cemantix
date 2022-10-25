@@ -19,7 +19,7 @@ const getRandomWord = async () => {
 const setState = async (state: string, word: string) => {
   const encoder = new TextEncoder();
   const data = encoder.encode(state + "," + word);
-  await Deno.writeTextFile("state.txt", data);
+  await Deno.writeTextFile("state.txt", String(data));
 };
 
 // Get state,word from the state.txt file
