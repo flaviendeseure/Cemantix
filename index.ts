@@ -1,11 +1,12 @@
 import { serve } from "https://deno.land/std@0.119.0/http/server.ts";
 
 async function handler(_req: Request): Promise<Response> {
-  await getStateGame();
+  //await getStateGame();
   const guess = await extractGuess(_req);
   const word_to_guess = await getCurrentWord();
   const similarity_ = await similarity(guess, word_to_guess);
-  return new Response(String(await responseBuilder(similarity_, guess, word_to_guess)));
+  const [state, word] = await getState();
+  return new Response(String(await responseBuilder(similarity_, guess, state+word)));
 }
 
 // Read file a.txt with deno and take a word at random
@@ -19,7 +20,7 @@ const getRandomWord = async () => {
 const setState = async (state: string, word: string) => {
   const encoder = new TextEncoder();
   const data = encoder.encode(state + "," + word);
-  await Deno.writeTextFile("state.txt", String(data));
+  await Deno.writeTextFile("state.txt", data);
 };
 
 // Get state,word from the state.txt file
