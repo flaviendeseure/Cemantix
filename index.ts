@@ -2,7 +2,7 @@ import { json, serve, validateRequest } from "https://deno.land/std@0.119.0/http
 
 async function handler(_req: Request): Promise<Response> {
   const guess = await extractGuess(_req);
-  const word_to_guess = await getRandomWord();
+  const word_to_guess = await getCurrentWord();
   const similarity_ = await similarity(guess, word_to_guess);
   return new Response(String(responseBuilder(similarity_, guess)));
 }
@@ -14,51 +14,37 @@ const getRandomWord = async () => {
   return words[Math.floor(Math.random() * words.length)];
 };
 
-/*
-async function queryFauna(
-  query: string,
-  variables: { [key: string]: unknown },
-): Promise<{
-  data?: any;
-  error?: any;
-}> {
-  // Grab the secret from the environment.
-  const token = Deno.env.get("FAUNA_SECRET");
-  if (!token) {
-    throw new Error("environment variable FAUNA_SECRET not set");
-  }
+// Set state,word in the state.txt file
+const setState = async (state: string, word: string) => {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(state + "," + word);
+  await Deno.writeFile("state.txt", data);
+};
 
-  try {
-    // Make a POST request to fauna's graphql endpoint with body being
-    // the query and its variables.
-    const res = await fetch("https://graphql.fauna.com/graphql", {
-      method: "POST",
-      headers: {
-        authorization: `Bearer ${token}`,
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({
-        query,
-        variables,
-      }),
-    });
+// Get state,word from the state.txt file
+const getState = async () => {
+  const decoder = new TextDecoder("utf-8");
+  const data = await Deno.readFile("state.txt");
+  return decoder.decode(data).split(",");
+};
 
-    const { data, errors } = await res.json();
-    if (errors) {
-      // Return the first error if there are any.
-      return { data, error: errors[0] };
-    }
+// Handle the case where the user wants to start a new game
+const getStateGame = async () => {
+  // if state equal to 1, the game is over
+  const [state, word] = await getState();
+  if (state === "1") {
+    await setState("0", await getRandomWord());
+  };
+};
 
-    return { data };
-  } catch (error) {
-    return { error };
-  }
-}
-*/
-
+// Get current word
+const getCurrentWord = async () => {
+  const [state, word] = await getState();
+  return word;
+};
 
 function responseBuilder(similarity, word){
-  const response = "Le mot " + word + " est proche à "+ Math.round(100*similarity) +"% du mot chien";
+  const response = "Le mot " + word + " est proche à "+ Math.round(100*similarity) +"% du mot à deviner";
   return response
 }
 
