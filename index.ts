@@ -7,7 +7,7 @@ async function handler(_req: Request): Promise<Response> {
 }
 
 function responseBuilder(similarity, word){
-  const response = "Le mot " + word + " est proche à "+ 100*similarity +"% du mot chien";
+  const response = "Le mot " + word + " est proche à "+ Math.round(100*similarity) +"% du mot chien";
   return response
 }
 
