@@ -1,7 +1,7 @@
 import { serve } from "https://deno.land/std@0.119.0/http/server.ts";
 
 async function handler(_req: Request): Promise<Response> {
-  return new Response(String(await similarity("chien", "chat")));
+  return new Response(String(await similarity(await extractGuess(_req), "chat")));
 }
 
 
@@ -25,6 +25,15 @@ async function similarity(word1: string, word2:string){
   const similarityResponseJson = await similarityResponse.json();
   return Number(similarityResponseJson.simscore);
 }
+
+const extractGuess = async (req: Request) => {
+  const slackPayload = await req.formData();
+  const guess = await slackPayload.get("text")?.toString();
+  if (!guess) {
+    throw Error("Guess is empty or null");
+  }
+  return guess;
+};
 
 serve(handler);
 
