@@ -1,7 +1,7 @@
 import { json, serve, validateRequest } from "https://deno.land/std@0.119.0/http/server.ts";
 
 async function handler(_req: Request): Promise<Response> {
-  getStateGame();
+  await getStateGame();
   const guess = await extractGuess(_req);
   const word_to_guess = await getCurrentWord();
   const similarity_ = await similarity(guess, word_to_guess);
