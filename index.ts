@@ -6,7 +6,7 @@ async function handler(_req: Request): Promise<Response> {
   const word_to_guess = await getCurrentWord();
   const similarity_ = await similarity(guess, word_to_guess);
   const [state, word] = await getState();
-  return new Response(String(await responseBuilder(similarity_, guess, state+word)));
+  return new Response(String(await responseBuilder(similarity_, guess, state+word+String(state==="1"))));
 }
 
 // Read file a.txt with deno and take a word at random
