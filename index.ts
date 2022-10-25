@@ -25,5 +25,6 @@ async function similarity(word1: string, word2:string){
   const similarityResponseJson = await similarityResponse.json();
   return Number(similarityResponseJson.simscore);
 }
+
 serve(handler);
 
